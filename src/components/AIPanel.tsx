@@ -134,10 +134,20 @@ export default function AIPanel({ editor, isOpen, onClose }: AIPanelProps) {
               const shape = editor.getShape(id as any);
               if (!shape) return;
               if (args.layout === "row") {
-                editor.updateShape({ id: shape.id, type: shape.type, x: cursorX, y: cursorY });
+                editor.updateShape({
+                  id: shape.id,
+                  type: shape.type,
+                  x: cursorX,
+                  y: cursorY,
+                });
                 cursorX += colWidth + gap;
               } else if (args.layout === "column") {
-                editor.updateShape({ id: shape.id, type: shape.type, x: cursorX, y: cursorY });
+                editor.updateShape({
+                  id: shape.id,
+                  type: shape.type,
+                  x: cursorX,
+                  y: cursorY,
+                });
                 cursorY += 80 + gap;
               } else {
                 const col = i % 2;
@@ -209,60 +219,44 @@ export default function AIPanel({ editor, isOpen, onClose }: AIPanelProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="absolute right-0 top-0 h-full w-96 bg-white border-l border-gray-200 shadow-xl flex flex-col z-50">
-      <div className="flex items-center justify-between px-4 py-3 border-b">
+    <div className="ai-panel">
+      <div className="ai-header">
         <div>
-          <div className="font-semibold text-sm">Blessas v1</div>
-          <div className="text-xs text-gray-500">
-            nvidia/nemotron-3.5-super-vl-120b-a12b
-          </div>
+          <strong>Blessas v1</strong>
+          <span>nvidia/nemotron-3.5-super-vl-120b-a12b</span>
         </div>
-        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg leading-none">
+        <button className="ai-close" onClick={onClose} aria-label="關閉">
           ×
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="ai-messages">
         {messages.map((m, i) => (
-          <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-            <div
-              className={`max-w-[85%] rounded-lg px-3 py-2 text-sm whitespace-pre-wrap ${
-                m.role === "user"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-800"
-              }`}
-            >
-              {m.content}
-            </div>
+          <div key={i} className={`msg ${m.role === "user" ? "user" : "assistant"}`}>
+            {m.content}
           </div>
         ))}
-        {loading && <div className="text-sm text-gray-400">Blessas 思考中...</div>}
+        {loading && <div className="ai-loading">Blessas 思考中...</div>}
         <div ref={bottomRef} />
       </div>
 
-      <div className="p-3 border-t">
-        <div className="flex gap-2">
-          <input
-            className="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="輸入指令，例如：在左上角寫待辦事項"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-              }
-            }}
-            disabled={loading}
-          />
-          <button
-            onClick={handleSend}
-            disabled={loading || !input.trim()}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm disabled:opacity-50"
-          >
-            送出
-          </button>
-        </div>
+      <div className="ai-input-row">
+        <input
+          className="input"
+          placeholder="輸入指令，例如：在左上角寫待辦事項"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
+          disabled={loading}
+        />
+        <button className="btn" onClick={handleSend} disabled={loading || !input.trim()}>
+          送出
+        </button>
       </div>
     </div>
   );

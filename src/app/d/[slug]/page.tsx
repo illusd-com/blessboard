@@ -43,114 +43,35 @@ export default function BoardPage() {
   }, []);
 
   if (loading) {
-    return (
-      <div
-        style={{
-          width: "100vw",
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#fff",
-          color: "#a3a3a3",
-          fontSize: 14,
-        }}
-      >
-        載入 BlessBoard…
-      </div>
-    );
+    return <div className="center-msg">載入 BlessBoard…</div>;
   }
 
   if (error) {
     return (
-      <div
-        style={{
-          width: "100vw",
-          height: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 16,
-          background: "#fff",
-        }}
-      >
+      <div className="center-msg">
         <div style={{ fontSize: 18, color: "#404040" }}>{error}</div>
-        <a href="/" style={{ fontSize: 14, color: "#2563eb" }}>
-          回到首頁建立新白板
-        </a>
+        <a href="/">回到首頁建立新白板</a>
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        position: "relative",
-        overflow: "hidden",
-        background: "#fff",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 40,
-          height: 48,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 16px",
-          background: "rgba(255,255,255,0.92)",
-          backdropFilter: "blur(12px)",
-          borderBottom: "1px solid #f0f0f0",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div
-            style={{
-              width: 24,
-              height: 24,
-              borderRadius: 7,
-              background: "#171717",
-              color: "#fff",
-              fontSize: 12,
-              fontWeight: 700,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            B
-          </div>
-          <span style={{ "style13, fontWeight: 650, color: "#171717" }}>
-            BlessBoard
-          </span>
-          <span style={{ fontSize: 12, color: "#a3a3a3" }}>/d/{slug}</span>
+    <div className="board-root">
+      <div className="board-topbar">
+        <div className="board-topbar-left">
+          <div className="logo-sm">B</div>
+          <span className="board-title">BlessBoard</span>
+          <span className="board-slug">/d/{slug}</span>
         </div>
-
         <button
+          className={`chip-btn${aiOpen ? " active" : ""}`}
           onClick={() => setAiOpen((v) => !v)}
-          style={{
-            fontSize: 12,
-            fontWeight: 600,
-            padding: "6px 12px",
-            borderRadius: 999,
-            border: aiOpen ? "1px solid #171717" : "1px solid #e5e5e5",
-            background: aiOpen ? "#171717" : "#fff",
-            color: aiOpen ? "#fff" : "#404040",
-            cursor: "pointer",
-          }}
         >
           {aiOpen ? "關閉 AI" : "Blessas"}
         </button>
       </div>
 
-      <div style={{ position: "absolute", inset: 0, paddingTop: 48 }}>
+      <div className="board-canvas">
         <Canvas
           slug={slug}
           initialSnapshot={boardData?.snapshot}
