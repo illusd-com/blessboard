@@ -26,10 +26,7 @@ export default function HomePage() {
       });
 
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "建立失敗");
-      }
+      if (!res.ok) throw new Error(data.error || "建立失敗");
 
       localStorage.setItem(`blessboard_owner_${data.slug}`, data.ownerToken);
       router.push(`/d/${data.slug}`);
@@ -41,13 +38,57 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4">
-      <div className="max-w-[420px] w-full space-y-10">
-        <div className="text-center space-y-3">
-          <h1 className="text-[40px] font-semibold tracking-tight text-neutral-900 leading-none">
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "24px",
+        background:
+          "radial-gradient(1200px 600px at 50% -10%, #f5f5f5 0%, #fafafa 45%, #ffffff 100%)",
+      }}
+    >
+      <div style={{ width: "100%", maxWidth: 440 }}>
+        <div style={{ textAlign: "center", marginBottom: 36 }}>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 48,
+              height: 48,
+              borderRadius: 14,
+              background: "#171717",
+              color: "#fff",
+              fontWeight: 700,
+              fontSize: 18,
+              letterSpacing: "-0.02em",
+              marginBottom: 18,
+            }}
+          >
+            B
+          </div>
+          <h1
+            style={{
+              margin: 0,
+              fontSize: 36,
+              fontWeight: 650,
+              letterSpacing: "-0.03em",
+              color: "#111",
+              lineHeight: 1.1,
+            }}
+          >
             BlessBoard
           </h1>
-          <p className="text-[15px] text-neutral-500 leading-relaxed">
+          <p
+            style={{
+              margin: "12px 0 0",
+              fontSize: 15,
+              lineHeight: 1.6,
+              color: "#737373",
+            }}
+          >
             白色無邊際格子白板
             <br />
             內建 Blessas AI，直接操作畫布
@@ -56,15 +97,38 @@ export default function HomePage() {
 
         <form
           onSubmit={handleCreate}
-          className="bg-white border border-neutral-200 rounded-2xl p-6 space-y-5 shadow-sm"
+          className="bb-card"
+          style={{
+            background: "#fff",
+            border: "1px solid #e5e5e5",
+            borderRadius: 16,
+            padding: 24,
+            boxShadow:
+              "0 1px 2px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.06)",
+          }}
         >
-          <div className="space-y-1.5">
-            <label className="block text-[13px] font-medium text-neutral-700">
-              自訂網址
-              <span className="text-neutral-400 font-normal ml-1">（選填）</span>
+          <div style={{ marginBottom: 18 }}>
+            <label
+              style={{
+                display: "block",
+                fontSize: 13,
+                fontWeight: 600,
+                color: "#404040",
+                marginBottom: 8,
+              }}
+            >
+              自訂網址{" "}
+              <span style={{ fontWeight: 400, color: "#a3a3a3" }}>（選填）</span>
             </label>
-            <div className="flex items-center gap-0 text-[14px]">
-              <span className="text-neutral-400 select-none shrink-0">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                fontSize: 14,
+              }}
+            >
+              <span style={{ color: "#a3a3a3", whiteSpace: "nowrap" }}>
                 blbd.huhm.cc/d/
               </span>
               <input
@@ -76,46 +140,68 @@ export default function HomePage() {
                   )
                 }
                 placeholder="my-board"
-                className="flex-1 min-w-0 border border-neutral-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition"
                 maxLength={40}
                 autoComplete="off"
+                className="bb-input"
+                style={{ flex: 1, minWidth: 0 }}
               />
             </div>
-            <p className="text-[12px] text-neutral-400">
+            <p style={{ margin: "8px 0 0", fontSize: 12, color: "#a3a3a3" }}>
               小寫英文、數字、連字號
             </p>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="block text-[13px] font-medium text-neutral-700">
-              標題
-              <span className="text-neutral-400 font-normal ml-1">（選填）</span>
+          <div style={{ marginBottom: 20 }}>
+            <label
+              style={{
+                display: "block",
+                fontSize: 13,
+                fontWeight: 600,
+                color: "#404040",
+                marginBottom: 8,
+              }}
+            >
+              標題{" "}
+              <span style={{ fontWeight: 400, color: "#a3a3a3" }}>（選填）</span>
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="未命名白板"
-              className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition"
+              className="bb-input"
             />
           </div>
 
           {error && (
-            <div className="text-[13px] text-red-600 bg-red-50 px-3 py-2 rounded-lg">
+            <div
+              style={{
+                marginBottom: 16,
+                fontSize: 13,
+                color: "#dc2626",
+                background: "#fef2f2",
+                border: "1px solid #fecaca",
+                borderRadius: 10,
+                padding: "10px 12px",
+              }}
+            >
               {error}
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-neutral-900 hover:bg-neutral-800 active:scale-[0.98] text-white font-medium text-[14px] py-2.5 rounded-lg transition disabled:opacity-50 disabled:pointer-events-none"
-          >
+          <button type="submit" disabled={loading} className="bb-btn">
             {loading ? "建立中…" : "建立新白板"}
           </button>
         </form>
 
-        <p className="text-center text-[12px] text-neutral-400">
+        <p
+          style={{
+            marginTop: 28,
+            textAlign: "center",
+            fontSize: 12,
+            color: "#a3a3a3",
+          }}
+        >
           Powered by Blessas v1 · NVIDIA Nemotron
         </p>
       </div>
