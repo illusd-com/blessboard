@@ -100,7 +100,7 @@ export default function AIPanel({ editor, isOpen, onClose }: AIPanelProps) {
             break;
           }
           case "delete_shapes": {
-            if (args.shapeIds?.length) editor.deleteShapes(args.shapeIds);
+            if (args.shapeIds?.length) editor.deleteShapes(args.shapeIds as any);
             break;
           }
           case "move_shapes": {
@@ -108,7 +108,7 @@ export default function AIPanel({ editor, isOpen, onClose }: AIPanelProps) {
               const dx = args.dx || 0;
               const dy = args.dy || 0;
               for (const id of args.shapeIds) {
-                const shape = editor.getShape(id);
+                const shape = editor.getShape(id as any);
                 if (shape) {
                   editor.updateShape({
                     id: shape.id,
@@ -131,7 +131,7 @@ export default function AIPanel({ editor, isOpen, onClose }: AIPanelProps) {
             let cursorY = 100;
             const colWidth = 220;
             ids.forEach((id: string, i: number) => {
-              const shape = editor.getShape(id);
+              const shape = editor.getShape(id as any);
               if (!shape) return;
               if (args.layout === "row") {
                 editor.updateShape({ id: shape.id, type: shape.type, x: cursorX, y: cursorY });
