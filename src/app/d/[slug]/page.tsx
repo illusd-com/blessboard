@@ -28,8 +28,7 @@ export default function BoardPage() {
           setError(res.status === 404 ? "找不到這張白板" : "載入失敗");
           return;
         }
-        const data = await res.json();
-        setBoardData(data);
+        setBoardData(await res.json());
       } catch {
         setError("網路錯誤");
       } finally {
@@ -45,17 +44,39 @@ export default function BoardPage() {
 
   if (loading) {
     return (
-      <div className="w-screen h-screen flex items-center justify-center bg-white">
-        <div className="text-[14px] text-neutral-400">載入 BlessBoard…</div>
+      <div
+        style={{
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#fff",
+          color: "#a3a3a3",
+          fontSize: 14,
+        }}
+      >
+        載入 BlessBoard…
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="w-screen h-screen flex flex-col items-center justify-center bg-white gap-4">
-        <div className="text-[18px] text-neutral-700">{error}</div>
-        <a href="/" className="text-[14px] text-blue-600 hover:underline underline-offset-2">
+      <div
+        style={{
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 16,
+          background: "#fff",
+        }}
+      >
+        <div style={{ fontSize: 18, color: "#404040" }}>{error}</div>
+        <a href="/" style={{ fontSize: 14, color: "#2563eb" }}>
           回到首頁建立新白板
         </a>
       </div>
@@ -63,27 +84,73 @@ export default function BoardPage() {
   }
 
   return (
-    <div className="w-screen h-screen relative overflow-hidden bg-white">
-      <div className="absolute top-0 left-0 right-0 z-40 flex items-center justify-between px-4 h-11 bg-white/90 backdrop-blur-md border-b border-neutral-100">
-        <div className="flex items-center gap-2.5">
-          <span className="text-[13px] font-semibold tracking-tight text-neutral-900">
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        position: "relative",
+        overflow: "hidden",
+        background: "#fff",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 40,
+          height: 48,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 16px",
+          background: "rgba(255,255,255,0.92)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid #f0f0f0",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div
+            style={{
+              width: 24,
+              height: 24,
+              borderRadius: 7,
+              background: "#171717",
+              color: "#fff",
+              fontSize: 12,
+              fontWeight: 700,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            B
+          </div>
+          <span style={{ "style13, fontWeight: 650, color: "#171717" }}>
             BlessBoard
           </span>
-          <span className="text-[12px] text-neutral-400">/d/{slug}</span>
+          <span style={{ fontSize: 12, color: "#a3a3a3" }}>/d/{slug}</span>
         </div>
+
         <button
           onClick={() => setAiOpen((v) => !v)}
-          className={`text-[12px] px-3 py-1 rounded-full border transition active:scale-[0.97] ${
-            aiOpen
-              ? "bg-neutral-900 text-white border-neutral-900"
-              : "bg-white text-neutral-700 border-neutral-200 hover:border-neutral-300"
-          }`}
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            padding: "6px 12px",
+            borderRadius: 999,
+            border: aiOpen ? "1px solid #171717" : "1px solid #e5e5e5",
+            background: aiOpen ? "#171717" : "#fff",
+            color: aiOpen ? "#fff" : "#404040",
+            cursor: "pointer",
+          }}
         >
           {aiOpen ? "關閉 AI" : "Blessas"}
         </button>
       </div>
 
-      <div className="absolute inset-0 pt-11">
+      <div style={{ position: "absolute", inset: 0, paddingTop: 48 }}>
         <Canvas
           slug={slug}
           initialSnapshot={boardData?.snapshot}
