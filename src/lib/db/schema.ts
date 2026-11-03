@@ -5,6 +5,7 @@ export const boards = sqliteTable("boards", {
   slug: text("slug").notNull().unique(),
   title: text("title"),
   ownerToken: text("owner_token").notNull(),
+  userId: text("user_id"), // GitHub user id when logged in
   passwordHash: text("password_hash"),
   isPublic: integer("is_public", { mode: "boolean" }).default(true),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
