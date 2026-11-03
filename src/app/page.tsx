@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function HomePage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [slug, setSlug] = useState("");
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
@@ -48,6 +50,54 @@ export default function HomePage() {
             <br />
             內建 Blessas AI，直接操作畫布
           </p>
+        </div>
+
+        <div className="card" style={{ marginBottom: 16 }}>
+          {status === "loading" ? (
+            <p className="hint" style={{ margin: 0 }}>
+              檢查登入狀態…
+            </p>
+          ) : session?.user ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 12,
+              }}
+            >
+              <div style={{ fontSize: 14 }}>
+                已登入：
+                <strong>{session.user.name || session.user.email}</strong>
+              </div>
+              <button
+                type="button"
+                className="chip-btn"
+                onClick={() => signOut()}
+              >
+                登出
+              </button>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 12,
+              }}
+            >
+              <p className="hint" style={{ margin: 0 }}>
+                登入後建立的白板會綁定你的帳號（也可不登入直接建立）
+              </p>
+              <button
+                type="button"
+                className="btn"
+                onClick={() => signIn("github")}
+              >
+                使用 GitHub 登入
+              </button>
+            </div>
+          )}
         </div>
 
         <form className="card" onSubmit={handleCreate}>

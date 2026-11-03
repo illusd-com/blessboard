@@ -2,7 +2,11 @@ import { nanoid } from "nanoid";
 import { db, boards, boardSnapshots } from "./db";
 import { eq, desc } from "drizzle-orm";
 
-export async function createBoard(options?: { slug?: string; title?: string }) {
+export async function createBoard(options?: {
+  slug?: string;
+  title?: string;
+  userId?: string | null;
+}) {
   const id = nanoid();
   const slug = options?.slug || nanoid(10);
   const ownerToken = nanoid(32);
@@ -13,6 +17,7 @@ export async function createBoard(options?: { slug?: string; title?: string }) {
     slug,
     title: options?.title || "未命名白板",
     ownerToken,
+    userId: options?.userId || null,
     isPublic: true,
     createdAt: now,
     updatedAt: now,

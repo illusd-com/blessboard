@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
 import { createBoard, getBoardBySlug } from "@/lib/board";
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await auth();
+    const userId = (session?.user as any)?.id as string | undefined;
+
     const body = await req.json().catch(() => ({}));
     const { slug, title } = body;
 
@@ -23,13 +27,18 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const board = await createBoard({ slug, title });
+    const board = await createBoard({
+      slug,
+      title,
+      userId: userId || null,
+    });
 
     return NextResponse.json({
       id: board.id,
       slug: board.slug,
       ownerToken: board.ownerToken,
       url: `/d/${board.slug}`,
+      userId: userId || null,
     });
   } catch (error: any) {
     console.error("Create board error:", error);
