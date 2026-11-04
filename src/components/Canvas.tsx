@@ -65,14 +65,23 @@ export default function Canvas({
         } catch (err) {
           console.error("Auto-save failed", err);
         }
-      }, 2000);
+      }, 1500);
     },
     [slug, ownerToken]
   );
 
   const handleMount = useCallback(
     (editor: Editor) => {
+      // 開啟格子模式（一格一格）
+      try {
+        editor.updateInstanceState({ isGridMode: true });
+        editor.user.updateUserPreferences({ isSnapMode: true });
+      } catch (e) {
+        console.warn("grid mode setup", e);
+      }
+
       onEditorReady?.(editor);
+
       const unsub = editor.store.listen(
         () => scheduleSave(editor),
         { source: "user", scope: "document" }
@@ -87,15 +96,31 @@ export default function Canvas({
 
   if (!ready) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-white">
-        <div className="text-gray-400 text-sm">載入白板中...</div>
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#fff",
+          color: "#a3a3a3",
+          fontSize: 14,
+        }}
+      >
+        載入白板中...
       </div>
     );
   }
 
   return (
-    <div className="w-full h-full">
-      <Tldraw store={store} onMount={handleMount} />
+    <div style={{ width: "100%", height: "100%", background: "#fff" }}>
+      <Tldraw
+        store={store}
+        onMount={handleMount}
+        // 白底格子感
+        inferDarkMode={false}
+      />
     </div>
   );
 }
